@@ -1,26 +1,8 @@
-/*
-OBJETIVO:
-Atualizar a interface sempre que o estado mudar.
 
-PENSAMENTO:
-
-1) Selecionar o container da lista.
-2) Limpar o conteúdo antes de renderizar novamente.
-3) Para cada transação:
-   - Criar elemento HTML dinamicamente.
-   - Inserir no DOM.
-4) Atualizar os cards com os valores calculados.
-
-REFLEXÃO:
-- Por que limpar antes de renderizar?
-- O que acontece se não limpar?
-
-DESAFIO:
-Como aplicar classes diferentes para receita e despesa?
-*/
 
 import { getTransacoes, addTransacao, removeTransacao } from "../state/state.js"
 import { calcularSaldo, calcularReceitas, calcularDespesas } from "../Operations/transactions.js";
+import { getCategoriaSelecionada } from "../categorias/categorias.js";
 
 
 
@@ -55,6 +37,7 @@ import { calcularSaldo, calcularReceitas, calcularDespesas } from "../Operations
         linha.innerHTML = ` 
             <span>${transac.descricao}</span>
             <span>${transac.tipo}</span>
+            <span>${transac.categoria ?? "Sem categoria"}</span>
             <span>${transac.data}</span>
             <span>${formatarMoeda(transac.valor)}</span>
         `;
@@ -95,9 +78,11 @@ import { calcularSaldo, calcularReceitas, calcularDespesas } from "../Operations
         const descricao = descricaoInput.value.trim();
         const valor = parseFloat(valorInput.value);
         const tipo = tipoSelect.value;
+        const categoria = getCategoriaSelecionada();
 
-        if (!descricao || isNaN(valor) || valor < 0) {
-            return alert("Preencha todos os campos corretamente!")
+        if (!descricao || isNaN(valor) || valor < 0 || !categoria) {
+            mostrarErroFormulario();
+            return;
         }
 
         const novaTransacao = {
@@ -105,7 +90,9 @@ import { calcularSaldo, calcularReceitas, calcularDespesas } from "../Operations
             descricao,
             valor,
             tipo,
+            categoria: getCategoriaSelecionada(),
             data: new Date().toLocaleDateString("pt-PT", { day: '2-digit', month: '2-digit', year: 'numeric' })
+            
         };
 
 
@@ -114,6 +101,15 @@ import { calcularSaldo, calcularReceitas, calcularDespesas } from "../Operations
         renderLista()
     }
 
+function mostrarErroFormulario() {
+    const form = document.querySelector(".nova-transacao");
+
+    form.classList.add("erro");
+
+    setTimeout(() => {
+        form.classList.remove("erro");
+    }, 400);
+}
 
 function limparFormulario() {
     descricaoInput.value = "";

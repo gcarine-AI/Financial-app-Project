@@ -239,6 +239,18 @@ body {
     font-size: 16px;
     cursor: pointer;
 }
+.nova-transacao.erro {
+    animation: shake 0.35s ease;
+    border: 1px solid var(--expense-color);
+}
+
+@keyframes shake {
+    0% {transform: translateX(0);}
+    25% {transform: translateX(-5px);}
+    50% {transform: translateX(5px);}
+    75% {transform: translateX(-5px);}
+    100% {transform: translateX(0);}
+}
 
 .form-container {
     width: 100%;
@@ -306,6 +318,10 @@ body {
     background-color: var(--primary-color-opacity);
     transform: scale(1.05);
 }
+.categorias.ativa {
+    background-color: var(--primary-color-opacity);
+    border-color: var(--primary-color);
+}
 
 .adiciona-historia {
     background-color: var(--primary-color);
@@ -356,20 +372,20 @@ body {
 
 .cabecalho-tabela {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr auto; 
-    padding: 10px 20px;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto; 
+    padding: 10px 18px;
     color: var(--black-titles);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: bold;
     letter-spacing: 1px;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .linha-transacao {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr auto;
-    padding: 12px 20px;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+    padding: 10px 18px;
     background-color: var(--card-background);
     border: 1px solid var(--card-borders);
     border-radius: 8px;
@@ -425,6 +441,8 @@ body {
     font-weight: bold;
     font-size: 12px;
     margin-left: 8px;
+    justify-self: end;
+    align-self: center;
 }
 
 .remover:hover {
