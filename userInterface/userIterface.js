@@ -60,9 +60,19 @@ import { getCategoriaSelecionada } from "../categorias/categorias.js";
    }
 
    export function actualizarCards (transacoes) {
+    const saldo = calcularSaldo(transacoes);
     balancoTotal.innerText = formatarMoeda(calcularSaldo(transacoes))
     rendaTotal.innerText = formatarMoeda(calcularReceitas(transacoes))
     despesasTotal.innerText = formatarMoeda(calcularDespesas(transacoes))
+
+    balancoTotal.classList.remove("positivo", "negativo")
+
+    if (saldo > 0) {
+        balancoTotal.classList.add("positivo")
+    } else if (saldo < 0) {
+        balancoTotal.classList.add("negativo")
+    }
+        
 }
    
 
@@ -90,7 +100,7 @@ import { getCategoriaSelecionada } from "../categorias/categorias.js";
             descricao,
             valor,
             tipo,
-            categoria: document.querySelector(".categoria.ativa") ?.innerText || "Outros",
+            categoria: document.querySelector(".categorias.ativa") ?.innerText || "Outros",
             data: new Date().toLocaleDateString("pt-PT", { day: '2-digit', month: '2-digit', year: 'numeric' })
             
         };
