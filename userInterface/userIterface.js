@@ -90,7 +90,7 @@ import { getCategoriaSelecionada } from "../categorias/categorias.js";
             descricao,
             valor,
             tipo,
-            categoria: getCategoriaSelecionada(),
+            categoria: document.querySelector(".categoria.ativa") ?.innerText || "Outros",
             data: new Date().toLocaleDateString("pt-PT", { day: '2-digit', month: '2-digit', year: 'numeric' })
             
         };
@@ -109,6 +109,12 @@ function mostrarErroFormulario() {
     setTimeout(() => {
         form.classList.remove("erro");
     }, 400);
+
+    setTimeout (() => {
+        alert ("Preencha todos os campos corretamente!")
+    }, 350);
+    
+    return;
 }
 
 function limparFormulario() {
