@@ -1,7 +1,11 @@
 import { configurarFormulario, renderLista } from "./userInterface/userIterface.js"
 
-configurarFormulario()
-renderLista()
+import { iniciarCategorias, getCategoriaSelecionada } from "./categorias/categorias.js"
+
+configurarFormulario();
+renderLista();
+
+iniciarCategorias();
 
 const data = document.querySelector(".calendario")
 
