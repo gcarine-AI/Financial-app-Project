@@ -26,7 +26,7 @@ import { calcularSaldo, calcularReceitas, calcularDespesas } from "../Operations
 
 
 
-   const CONTAINER = document.querySelector(".lista-transacoes");
+   const CONTAINER = document.querySelector(".transacoes_historico");
    const balancoTotal = document.querySelector("#valor_balanco")
    const rendaTotal = document.querySelector("#valor_renda")
    const despesasTotal = document.querySelector("#valor_despesas")
@@ -43,28 +43,30 @@ import { calcularSaldo, calcularReceitas, calcularDespesas } from "../Operations
 
    export function renderLista() {
 
-    const transacoes = getTransacoes()
+    const transacoes = getTransacoes();
      
-
-    CONTAINER.innerHTML = ""
+    CONTAINER.innerHTML = "";
 
     transacoes.forEach(transac => {
         const linha = document.createElement("div")
         linha.classList.add("linha-transacao")
-        linha.classList.add(transac.tipo === "receita" ? "receita" : "despesa")
+        linha.classList.add(transac.tipo === "receita" ? "receita" : "despesa");
 
         linha.innerHTML = ` 
             <span>${transac.descricao}</span>
             <span>${transac.tipo}</span>
             <span>${transac.data}</span>
             <span>${formatarMoeda(transac.valor)}</span>
-        `
+        `;
+
         const deleteButton = document.createElement("button");
-         deleteButton.innerText = "Delete";
+         deleteButton.classList.add("Delete");
+         deleteButton.innerText = "x";
          deleteButton.addEventListener("click", function() {
-           // const transacoesAposRemove = getTransacoes()
+            if(confirm("Deseja realmente remover esta transação?")) {
             removeTransacao(transac.id);
-            renderLista()
+            renderLista();
+            } 
         });
 
         linha.appendChild(deleteButton);
@@ -77,7 +79,7 @@ import { calcularSaldo, calcularReceitas, calcularDespesas } from "../Operations
    export function actualizarCards (transacoes) {
     balancoTotal.innerText = formatarMoeda(calcularSaldo(transacoes))
     rendaTotal.innerText = formatarMoeda(calcularReceitas(transacoes))
-    despesasTotal.textContent = formatarMoeda(calcularDespesas(transacoes))
+    despesasTotal.innerText = formatarMoeda(calcularDespesas(transacoes))
 }
    
 
@@ -86,23 +88,26 @@ import { calcularSaldo, calcularReceitas, calcularDespesas } from "../Operations
       form.addEventListener("submit", event => {
         event.preventDefault()
      
-    })
+    });
    }
       function adicionarTransacaoFormulario() {
 
-        const descricao = descricaoInput.value.trim()
-        const valor = parseFloat(valorInput.value)
-        const tipo = tipoSelect.value
+        const descricao = descricaoInput.value.trim();
+        const valor = parseFloat(valorInput.value);
+        const tipo = tipoSelect.value;
 
-        if (!descricao || isNaN(valor) || valor < 0) return alert("Preencha todos os campos corretamente!")
+        if (!descricao || isNaN(valor) || valor < 0) {
+            return alert("Preencha todos os campos corretamente!")
+        }
 
         const novaTransacao = {
             id: Date.now(),
             descricao,
             valor,
             tipo,
-            data: new Date().toLocaleDateString()
-        }
+            data: new Date().toLocaleDateString("pt-PT", { day: '2-digit', month: '2-digit', year: 'numeric' })
+        };
+
 
         addTransacao(novaTransacao)
         limparFormulario()
@@ -111,16 +116,16 @@ import { calcularSaldo, calcularReceitas, calcularDespesas } from "../Operations
 
 
 function limparFormulario() {
-    descricaoInput.value = ""
-    valorInput.value = ""
-    tipoSelect.value = "receita"
+    descricaoInput.value = "";
+    valorInput.value = "";
+    tipoSelect.value = "receita";
 }
 
 
 
 
 function formatarMoeda(valor) {
-    return valor.toLocaleString("pt-PT", { style: "currency", currency: "EUR" })
+    return valor.toLocaleString("pt-PT", { style: "currency", currency: "EUR" });
 }
 
   

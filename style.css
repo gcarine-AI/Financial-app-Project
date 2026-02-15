@@ -20,21 +20,9 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     min-height: 100vh;
-
     display: grid;
-
-    /* 2 colunas:
-       180px fixa para sidebar
-       1fr ocupa o restante */
     grid-template-columns: 200px 1fr;
-
-    /* 3 linhas:
-       header
-       main (flexível)
-       footer */
     grid-template-rows: auto 1fr auto;
-
-    /* Nomeando as áreas */
     grid-template-areas:
         "sidebar header"
         "sidebar main"
@@ -97,6 +85,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .header-actions {
@@ -119,7 +108,7 @@ body {
 }
 
 .subtitle {
-    color: var(--gray-titles);
+    color: var(--black-titles);
     font-size: 12px;
 }
 
@@ -132,6 +121,10 @@ body {
     cursor: pointer;
 }
 
+.exportar:hover {
+    opacity: 0.9;
+}
+
 .main {
     grid-area: main;
     padding: 40px;
@@ -142,12 +135,6 @@ body {
     align-items: center; 
 }
 
-/* .transacoes, .cards-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-} */
 
 .cards-container {
     display: grid;
@@ -174,6 +161,11 @@ body {
     padding: 20px;
     border-radius: 8px;
     border: 1px solid var(--card-borders);
+    transition: transform 0.2s ease;
+}
+
+.nova-transacao:hover {
+    transform: scale(1.02);
 }
 
 .card {
@@ -184,16 +176,16 @@ body {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    transition: ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.25);
 }
 
 .titulo-card {
-    color: var(--gray-titles);
+    color: var(--black-titles);
     font-size: 14px;
 }
 
@@ -205,7 +197,7 @@ body {
 }
 
 .positivo {
-    color: var(--primary-color);
+    color: green;
 }
 
 .negativo {
@@ -225,7 +217,7 @@ body {
 .titulo-nova-transacao-container {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     gap: 8px;
 }
 
@@ -237,8 +229,8 @@ body {
 
 .nova-transacao-icon {
     color: var(--primary-color);
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -255,7 +247,7 @@ body {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
 }
 
 .form-container label {
@@ -302,16 +294,17 @@ body {
 .categorias {
     color: var(--accent-color);
     font-size: 12px;
-    padding: 12px;
+    padding: 10px;
     border: 1px solid var(--card-borders);
     border-radius: 8px;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: background-color 0.3s ease, tranform 0.2s ease;
 }
 
 
 .categorias:hover {
     background-color: var(--primary-color-opacity);
+    transform: scale(1.05);
 }
 
 .adiciona-historia {
@@ -322,11 +315,12 @@ body {
     border-radius: 8px;
     cursor: pointer;
     margin-top: 12px;
+    transition: transform 0.2s ease, opacity 0.3s ease;
 }
 
 .adiciona-historia:hover {
     opacity: 0.9;
-    transform: scale(1.02);
+    transform: scale(1.03);
 }
 
 .btn-container {
@@ -375,18 +369,30 @@ body {
 .linha-transacao {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr auto;
-    padding: 10px 20px;
+    padding: 12px 20px;
+    background-color: var(--card-background);
+    border: 1px solid var(--card-borders);
+    border-radius: 8px;
     color: var(--black-titles);
     font-size: 11px;
     font-weight: bold;
     letter-spacing: 1px;
     align-items: center;
     gap:8px;
+    margin-bottom: 12px;
+    transition: background 0.2s ease
 
 }
+.linha-transacao.receita span:last-child { 
+    color: var(--primary-color);
+ }
+.linha-transacao.despesa span:last-child { 
+    color: var(--expense-color);
+}
+
 .item-transacao {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
     align-items: center;
     background-color: var(--card-background);
     border: 1px solid var(--card-borders);
@@ -410,6 +416,19 @@ body {
     border: 1px solid var(--card-borders);
     width: 100%;
 
+}
+.remover {
+    background: none;
+    border: none;
+    color: var(--expense-color);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+    margin-left: 8px;
+}
+
+.remover:hover {
+    color: var(--primary-color);
 }
 
 .caixa-icone {
@@ -443,6 +462,8 @@ body {
 
 .etiqueta-receita { color: var(--primary-color); }
 .etiqueta-despesa { color: var(--expense-color); }
+
+
 
 .data-transacao {
     color: var(--gray-titles);
@@ -502,5 +523,32 @@ body {
 
     .transacoes {
         grid-template-columns: 1fr;
+    }
+
+    .nova-transacao, .cards-container, .historico {
+        width: 100%;
+    }
+
+    .cabecalho-tabela, .linha-transacao {
+        grid-template-columns: 1fr 1fr 1fr 1fr auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .titulo {
+        font-size: 16px;
+    }
+
+    .valor {
+        font-size: 20px;
+    }
+
+    .descricao-form input, .qtd-container input {
+        font-size: 14px;
+    }
+
+    .categorias {
+        font-size: 10px;
+        padding: 8px;
     }
 }
