@@ -3,8 +3,7 @@
 import { getTransacoes, addTransacao, removeTransacao } from "../state/state.js"
 import { calcularSaldo, calcularReceitas, calcularDespesas } from "../Operations/transactions.js";
 import { getCategoriaSelecionada } from "../categorias/categorias.js";
-
-
+import { updateTransacao } from "../state/state.js";
 
 
 
@@ -23,11 +22,12 @@ import { getCategoriaSelecionada } from "../categorias/categorias.js";
 
    const botaoAdicionar = document.querySelector(".adiciona-historia");
 
-
+    let idEdicao = null;
 
    export function renderLista() {
 
     const transacoes = getTransacoes();
+
      
     CONTAINER.innerHTML = "";
 
@@ -44,22 +44,45 @@ import { getCategoriaSelecionada } from "../categorias/categorias.js";
             <span>${formatarMoeda(transac.valor)}</span>
         `;
 
-        const deleteButton = document.createElement("button");
-         deleteButton.classList.add("remover");
-         deleteButton.innerText = "x";
+        const editButton = document.createElement("button");
+        editButton.classList.add("editar");
+        editButton.innerHTML = "&#9998";
 
-         deleteButton.addEventListener("click", function() {
+
+        editButton.addEventListener("click", () => {
+            carregarFormularioEdicao(transac);
+        });
+
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add("remover");
+        deleteButton.innerText = "x";
+
+        deleteButton.addEventListener("click", function() {
             if(confirm("Deseja realmente remover esta transação?")) {
             removeTransacao(transac.id);
             renderLista();
             } 
         });
 
+    
+        linha.appendChild(editButton);
         linha.appendChild(deleteButton);
         CONTAINER.appendChild(linha)
 
     });
+
     actualizarCards(transacoes)
+   }
+
+   function carregarFormularioEdicao (transac) {
+
+    descricaoInput.value = transac.descricao;
+    valorInput.value = transac.value;
+    tipoSelect.value = transac.tipo;
+
+    idEdicao = transac.id;
+
+    botaoAdicionar.innerText = "Guardar alteração";
    }
 
    function calcularVariacaoPercentual(atual, anterior) {
@@ -68,6 +91,8 @@ import { getCategoriaSelecionada } from "../categorias/categorias.js";
 
     return ((atual - anterior) / anterior) * 100;
 }
+
+
 
 
    export function actualizarCards (transacoes) {
@@ -126,6 +151,21 @@ import { getCategoriaSelecionada } from "../categorias/categorias.js";
             data: new Date().toLocaleDateString("pt-PT", { day: '2-digit', month: '2-digit', year: 'numeric' })
             
         };
+
+        if (idEdicao) {
+
+            updateTransacao(idEdicao, {
+                descricao,
+                valor,
+                tipo,
+                categoria,
+                data: new Date().toLocaleDateString("pt-PT")
+            });
+
+        idEdicao = null;
+        botaoAdicionar.innerText = "Adicionar ao histórico";
+
+    }
 
 
         addTransacao(novaTransacao)
