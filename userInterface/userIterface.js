@@ -9,9 +9,11 @@ import { getCategoriaSelecionada } from "../categorias/categorias.js";
 
 
    const CONTAINER = document.querySelector(".transacoes_historico");
+
    const balancoTotal = document.querySelector("#valor_balanco")
    const rendaTotal = document.querySelector("#valor_renda")
    const despesasTotal = document.querySelector("#valor_despesas")
+   const infoDespesas = document.querySelector("#info_despesas")
 
 
    const form = document.querySelector(".form-container")
@@ -30,8 +32,8 @@ import { getCategoriaSelecionada } from "../categorias/categorias.js";
     CONTAINER.innerHTML = "";
 
     transacoes.forEach(transac => {
-        const linha = document.createElement("div")
-        linha.classList.add("linha-transacao")
+        const linha = document.createElement("div");
+        linha.classList.add("linha-transacao");
         linha.classList.add(transac.tipo === "receita" ? "receita" : "despesa");
 
         linha.innerHTML = ` 
@@ -43,8 +45,9 @@ import { getCategoriaSelecionada } from "../categorias/categorias.js";
         `;
 
         const deleteButton = document.createElement("button");
-         deleteButton.classList.add("Delete");
+         deleteButton.classList.add("remover");
          deleteButton.innerText = "x";
+
          deleteButton.addEventListener("click", function() {
             if(confirm("Deseja realmente remover esta transação?")) {
             removeTransacao(transac.id);
@@ -59,9 +62,17 @@ import { getCategoriaSelecionada } from "../categorias/categorias.js";
     actualizarCards(transacoes)
    }
 
+   function calcularVariacaoPercentual(atual, anterior) {
+    if (anterior === 0) return 0;
+   
+
+    return ((atual - anterior) / anterior) * 100;
+}
+
+
    export function actualizarCards (transacoes) {
     const saldo = calcularSaldo(transacoes);
-    balancoTotal.innerText = formatarMoeda(calcularSaldo(transacoes))
+    balancoTotal.innerText = formatarMoeda(saldo)
     rendaTotal.innerText = formatarMoeda(calcularReceitas(transacoes))
     despesasTotal.innerText = formatarMoeda(calcularDespesas(transacoes))
 
@@ -72,17 +83,28 @@ import { getCategoriaSelecionada } from "../categorias/categorias.js";
     } else if (saldo < 0) {
         balancoTotal.classList.add("negativo")
     }
-        
+    
+   const despesasAtuais = calcularDespesas(transacoes);
+    const despesasAnteriores = 2000;
+    const variacao = calcularVariacaoPercentual(despesasAtuais, despesasAnteriores);
+
+    if (variacao < 0) {
+        infoDespesas.innerText = `${variacao.toFixed(1)}% redução`;
+    } else {
+        infoDespesas.innerText = `+${variacao.toFixed(1)}% aumento`;
+    }
 }
    
 
    export function configurarFormulario() {
-      botaoAdicionar.addEventListener("click", adicionarTransacaoFormulario)
+      botaoAdicionar.addEventListener("click", adicionarTransacaoFormulario);
+
       form.addEventListener("submit", event => {
         event.preventDefault()
      
     });
    }
+
       function adicionarTransacaoFormulario() {
 
         const descricao = descricaoInput.value.trim();
@@ -100,7 +122,7 @@ import { getCategoriaSelecionada } from "../categorias/categorias.js";
             descricao,
             valor,
             tipo,
-            categoria: document.querySelector(".categorias.ativa") ?.innerText || "Outros",
+            categoria: categoria|| "Outros",
             data: new Date().toLocaleDateString("pt-PT", { day: '2-digit', month: '2-digit', year: 'numeric' })
             
         };
@@ -124,13 +146,14 @@ function mostrarErroFormulario() {
         alert ("Preencha todos os campos corretamente!")
     }, 350);
     
-    return;
 }
 
 function limparFormulario() {
     descricaoInput.value = "";
     valorInput.value = "";
     tipoSelect.value = "receita";
+
+    document.querySelectorAll(".categorias").forEach(b => b.classList.remove("ativa"));
 }
 
 

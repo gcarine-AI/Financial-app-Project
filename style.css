@@ -11,6 +11,7 @@
     --tertiary-color: #0b1711;
     --accent-color: #f6f8f7;
     --black-titles: #080808dc;
+    --grey-titles: #a0a0a0;
     --expense-color: #c73333;
     --card-borders: #0c7b4d41;
     --card-background: #0c20235a;
@@ -195,7 +196,7 @@ body {
     font-size: 24px;
     font-weight: bold;
     margin-top: 4px;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, transform 0.25s ease;
 }
 
 .positivo {
@@ -207,7 +208,7 @@ body {
 }
 
 .informacao {
-    color: var(--primary-color);
+    color: var(--positive-color);
     font-size: 12px;
     margin-top: 8px;
 }
@@ -312,7 +313,7 @@ body {
     border: 1px solid var(--card-borders);
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease, tranform 0.2s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 
@@ -408,22 +409,7 @@ body {
     color: var(--expense-color);
 }
 
-.item-transacao {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr auto;
-    align-items: center;
-    background-color: var(--card-background);
-    border: 1px solid var(--card-borders);
-    border-radius: 8px;
-    padding: 12px 20px;
-    margin-bottom: 12px;
-}
 
-.info-transacao {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
 
 .historico {
     display: flex;
@@ -445,56 +431,16 @@ body {
     margin-left: 8px;
     justify-self: end;
     align-self: center;
+    transition: color 0.2s ease;
 }
 
 .remover:hover {
     color: var(--primary-color);
 }
 
-.caixa-icone {
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--tertiary-color); 
-}
-
-.real-icon {
-    font-size: 14px;   
-}
-
-.nome-transacao {
-    color: var(--accent-color);
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.etiqueta {
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 8px;
-    font-weight: bold;
-    display: inline-block;
-    background-color: var(--tertiary-color);
-}
-
-.etiqueta-receita { color: var(--primary-color); }
-.etiqueta-despesa { color: var(--expense-color); }
 
 
 
-.data-transacao {
-    color: var(--gray-titles);
-    font-size: 12px;
-}
-
-.valor-transacao {
-    font-weight: bold;
-    text-align: right;
-    font-size: 12px;
-}
 
 .rodape-tabela {
     text-align: center;
