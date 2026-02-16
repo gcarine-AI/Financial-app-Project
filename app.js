@@ -1,6 +1,6 @@
 import { configurarFormulario, renderLista } from "./userInterface/userIterface.js"
 
-import { iniciarCategorias, getCategoriaSelecionada } from "./categorias/categorias.js"
+import { iniciarCategorias } from "./categorias/categorias.js"
 
 configurarFormulario();
 renderLista();
